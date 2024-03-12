@@ -1,4 +1,7 @@
+library(devEMF)
+
 runif2 <- function (n = 10, min = 0, max = 1) runif(n, min/2, max/2) + runif(n, min/2, max/2)
+
 tab_specific_values <- function(vector, values = unique(vector)) `names<-`(rowSums(outer(values, vector, `==`)), values)
 
 nr <- 10
@@ -9,13 +12,6 @@ cluster_risk <- 0.05
 cluster_number <- 16
 
 # generate data
-
-# > which(res > 5)
-# [1] 241 454 719 750
-
-# res <- NULL
-# for(i in 1:1000) {
-# if(i %% 10 == 0) print (i)
 
 set.seed(750)
 cluster_pops <- sample(1:(nr*nc), size = mean_pop*nr*nc, replace = T)
@@ -37,9 +33,6 @@ sig <- which(mapply(pt,
                     n2 = sum(cluster_pops), 
                     SIMPLIFY = T) < 0.05)
 
-# res[i] <- length(sig)
-# }
-
 # locations
 
 xl <- rep(seq_len(nc)-1, nr)
@@ -53,7 +46,7 @@ xl_sigs <- sig - nc * yb_sigs - 1
 
 # plot
 
-png('texas_map.png', height = 6, width = 6, units = 'in', res = 300)
+emf('texas_map.emf', height = 6, width = 6)
 
 plot(1, type = 'n', xlim = c(0, nc), ylim = c(0, nr), xlab = NA, ylab = NA, axes = F)
 axis(1, seq_len(nc)-0.5, seq_len(nc), tick = F)
@@ -69,4 +62,3 @@ points(xp[case == 1], yp[case == 1], cex = 0.4, pch = 19, col = 'red')
 dev.off()
 
 case_cluster[sig]
-
